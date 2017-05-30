@@ -32,11 +32,13 @@ public class Lab1_202_14 extends AppCompatActivity {
         final float acc_readings[][] = new float[100][3]; //2D array to store last 100 acc readings.
 
         //Button Setup
-        Button myButton = new Button(getApplicationContext());
-        myButton.setText("Generate CSV Record for Acc Sensor");
-        l.addView(myButton);
+        Button csvOutputButton = new Button(getApplicationContext());
+        csvOutputButton.setText("Generate CSV Record for Acc Sensor");
+        l.addView(csvOutputButton);
 
-
+        Button resetMaxButton = new Button(getApplicationContext());
+        resetMaxButton.setText("Reset Max History");
+        l.addView(resetMaxButton);
 
         //Display Setup
         TextView light = new TextView(getApplicationContext());
@@ -65,23 +67,23 @@ public class Lab1_202_14 extends AppCompatActivity {
 
         //Sensor Setup
         Sensor lightSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
-        SensorEventListener lightObject = new LightSensorEventListener(light,lightMax);
+        final LightSensorEventListener lightObject = new LightSensorEventListener(light,lightMax);
         sensorManager.registerListener(lightObject, lightSensor, sensorManager.SENSOR_DELAY_NORMAL);
 
         Sensor accSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        SensorEventListener accObject = new AccSensorEventListener(acc, accMax, graph, acc_readings);
+        final AccSensorEventListener accObject = new AccSensorEventListener(acc, accMax, graph, acc_readings);
         sensorManager.registerListener(accObject, accSensor, sensorManager.SENSOR_DELAY_NORMAL);
 
         Sensor mfSensor = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
-        SensorEventListener mfObject = new MfSensorEventListener(mf,mfMax);
+        final MfSensorEventListener mfObject = new MfSensorEventListener(mf,mfMax);
         sensorManager.registerListener(mfObject, mfSensor, sensorManager.SENSOR_DELAY_NORMAL);
 
         Sensor rvSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
-        SensorEventListener rvObject = new RvSensorEventListener(rv,rvMax);
+        final RvSensorEventListener rvObject = new RvSensorEventListener(rv,rvMax);
         sensorManager.registerListener(rvObject, rvSensor, sensorManager.SENSOR_DELAY_NORMAL);
 
         //Button Press Setup
-        myButton.setOnClickListener(new View.OnClickListener(){
+        csvOutputButton.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v) {
                 FileWriter fileWriter = null;
                 PrintWriter printWriter = null;
@@ -107,11 +109,31 @@ public class Lab1_202_14 extends AppCompatActivity {
                 }
             }
         });
+
+        resetMaxButton.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v) {
+                lightObject.ResetMax();
+                accObject.ResetMax();
+                rvObject.ResetMax();
+                mfObject.ResetMax();
+
+            }
+        });
     }
 }
 
 abstract class GeneralSensor implements SensorEventListener {
-    //Contains functions that each sensor needs.
+    //Contains functions and variables all sensors needs.
+    TextView output;
+    TextView outputMax;
+    String sensorName;
+    float Max[];
+
+    public GeneralSensor(TextView outputView, TextView outputViewMax){
+        Max = new float[3];
+        output = outputView;
+        outputMax = outputViewMax;
+    }
 
     public float[] CheckMax(float newValue[],float currentMax[]){
         //Function checks if inputted array values are larger then current max values and returns updated max.
@@ -146,18 +168,20 @@ abstract class GeneralSensor implements SensorEventListener {
         currentReadingOutput.setText("Current "+sensorName+" Reading:\n"+currentValue);
         maxReadingOutput.setText("Max "+sensorName+" Reading:\n"+maxValue);
     }
+
+    public void ResetMax(){
+        //Resets max sensor readings to zero
+        Max[0] = 0;
+        Max[1] = 0;
+        Max[2] = 0;
+    }
 }
 
-final class LightSensorEventListener extends GeneralSensor {
-    TextView output;
-    TextView outputMax;
-    String sensorName;
+class LightSensorEventListener extends GeneralSensor {
     float lightMax;
 
     public LightSensorEventListener(TextView outputView, TextView outputViewMax){
-        output = outputView;
-        outputMax = outputViewMax;
-
+        super(outputView,outputViewMax);
         lightMax = 0;
         sensorName = "Light Sensor";
         UpdateText(0f,lightMax,output,outputMax,sensorName); //Initial text update to set sensor reading to 0.
@@ -171,25 +195,22 @@ final class LightSensorEventListener extends GeneralSensor {
             UpdateText(se.values[0],lightMax,output,outputMax,sensorName);
         }
     }
+
+    public void ResetMax(){
+        lightMax = 0;
+    }
 }
 
 class AccSensorEventListener extends GeneralSensor {
-    TextView output;
-    TextView outputMax;
-    public String sensorName;
-    float accMax[];
     float accValues[][];
     LineGraphView g;
 
     public AccSensorEventListener(TextView outputView, TextView outputViewMax, LineGraphView graph, float accReadings[][]){
-        output = outputView;
-        outputMax = outputViewMax;
+        super(outputView,outputViewMax);
         g = graph;
         accValues = accReadings;
-
-        accMax = new float[3];
         sensorName = "Accelerometer";
-        UpdateText(new float[]{0,0,0},accMax,output,outputMax,sensorName); //Initial text update to set sensor reading to 0.
+        UpdateText(new float[]{0,0,0},Max,output,outputMax,sensorName); //Initial text update to set sensor reading to 0.
     }
 
     public void onAccuracyChanged(Sensor s, int i) { }
@@ -207,58 +228,44 @@ class AccSensorEventListener extends GeneralSensor {
             accValues[0][2] = se.values[2];
 
             g.addPoint(se.values);  //Graphs the new acc value.
-            accMax = CheckMax(se.values,accMax);
-            UpdateText(se.values,accMax,output,outputMax,sensorName);
+            Max = CheckMax(se.values,Max);
+            UpdateText(se.values,Max,output,outputMax,sensorName);
         }
     }
 }
 
 class MfSensorEventListener extends GeneralSensor {
-    TextView output;
-    TextView outputMax;
-    public String sensorName;
-    float mfMax[];
 
     public MfSensorEventListener(TextView outputView, TextView outputViewMax){
-        output = outputView;
-        outputMax = outputViewMax;
-
-        mfMax = new float[3];
+        super(outputView,outputViewMax);
         sensorName = "Magnetic Field";
-        UpdateText(new float[]{0,0,0},mfMax,output,outputMax,sensorName); //Initial text update to set sensor reading to 0.
+        UpdateText(new float[]{0,0,0},Max,output,outputMax,sensorName); //Initial text update to set sensor reading to 0.
     }
 
     public void onAccuracyChanged(Sensor s, int i) { }
 
     public void onSensorChanged(SensorEvent se) {
         if (se.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD) {
-            mfMax = CheckMax(se.values,mfMax);
-            UpdateText(se.values,mfMax,output,outputMax,sensorName);
+            Max = CheckMax(se.values,Max);
+            UpdateText(se.values,Max,output,outputMax,sensorName);
         }
     }
 }
 
 class RvSensorEventListener extends GeneralSensor {
-    TextView output;
-    TextView outputMax;
-    public String sensorName;
-    float rvMax[];
 
     public RvSensorEventListener(TextView outputView, TextView outputViewMax){
-        output = outputView;
-        outputMax = outputViewMax;
-
-        rvMax = new float[3];
+        super(outputView,outputViewMax);
         sensorName = "Rotation Vector";
-        UpdateText(new float[]{0,0,0},rvMax,output,outputMax,sensorName); //Initial text update to set sensor reading to 0.
+        UpdateText(new float[]{0,0,0},Max,output,outputMax,sensorName); //Initial text update to set sensor reading to 0.
     }
 
     public void onAccuracyChanged(Sensor s, int i) { }
 
     public void onSensorChanged(SensorEvent se) {
         if (se.sensor.getType() == Sensor.TYPE_ROTATION_VECTOR) {
-            rvMax = CheckMax(se.values,rvMax);
-            UpdateText(se.values,rvMax,output,outputMax,sensorName);
+            Max = CheckMax(se.values,Max);
+            UpdateText(se.values,Max,output,outputMax,sensorName);
         }
     }
 }
