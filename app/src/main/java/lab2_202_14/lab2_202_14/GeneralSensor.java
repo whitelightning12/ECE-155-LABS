@@ -14,6 +14,7 @@ abstract class GeneralSensor implements SensorEventListener {
     TextView outputMax;
     public String sensorName;
     float Max[];
+    final int C = 15;
 
     public GeneralSensor(TextView outputView, TextView outputViewMax){
         output = outputView;
@@ -53,5 +54,13 @@ abstract class GeneralSensor implements SensorEventListener {
         //Updates text for the light sensor.
         currentReadingOutput.setText("Current "+sensorName+" Reading:\n"+currentValue);
         maxReadingOutput.setText("Max "+sensorName+" Reading:\n"+maxValue);
+    }
+
+    public float[] filterReading(float newReading[], float previousReading[]){
+        float filteredReading[] = new float[3];
+        previousReading[0] += (newReading[0] - previousReading[0])/C;
+        previousReading[1] += (newReading[1] - previousReading[1])/C;
+        previousReading[2] += (newReading[2] - previousReading[2])/C;
+        return previousReading;
     }
 }

@@ -27,12 +27,14 @@ public class Lab2_202_14 extends AppCompatActivity {
         setContentView(R.layout.activity_lab2_202_14);
         LinearLayout l = (LinearLayout)findViewById(R.id.label2);
         final SensorManager sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-
         //Graph Setup
         LineGraphView graph = new LineGraphView(getApplicationContext(),100, Arrays.asList("x","y","z"));
         l.addView(graph);
+        LineGraphView graph2 = new LineGraphView(getApplicationContext(),100, Arrays.asList("x","y","z"));
+        l.addView(graph2);
 
-        final float acc_readings[][] = new float[100][3]; //2D array to store last 100 acc readings.
+        final float accSensorHistory[][] = new float[100][3]; //2D array to store last 100 acc readings.
+        final float accSensorHistoryFiltered[][] = new float[100][3]; //2D array to store last 100 acc readings.
 
         //Button Setup
         Button csvOutputButton = new Button(getApplicationContext());
@@ -47,8 +49,8 @@ public class Lab2_202_14 extends AppCompatActivity {
         l.addView(accMax);
 
         //Sensor Setup
-        Sensor accSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
-        AccSensorEventListener accObject = new AccSensorEventListener(acc, accMax, graph, acc_readings);
+        Sensor accSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        AccSensorEventListener accObject = new AccSensorEventListener(acc, accMax, graph,graph2, accSensorHistory,accSensorHistoryFiltered);
         sensorManager.registerListener(accObject, accSensor, sensorManager.SENSOR_DELAY_GAME);
 
         //Button Press Setup
@@ -63,7 +65,7 @@ public class Lab2_202_14 extends AppCompatActivity {
                     fileWriter = new FileWriter(file);
                     printWriter = new PrintWriter(fileWriter);
                     for (int i = 0; i < 100; i++) {  //Outputs acc values into excel file in table format.
-                        printWriter.println(String.format("%.2f,%.2f,%.2f", acc_readings[i][0], acc_readings[i][1], acc_readings[i][2]));
+                        printWriter.println(String.format("%.2f,%.2f,%.2f", accSensorHistoryFiltered[i][0], accSensorHistoryFiltered[i][1], accSensorHistoryFiltered[i][2]));
                     }
                 }
 
