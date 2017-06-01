@@ -20,7 +20,7 @@ import java.io.PrintWriter;
 import java.util.Arrays;
 
 public class Lab2_202_14 extends AppCompatActivity {
-
+ int a = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
