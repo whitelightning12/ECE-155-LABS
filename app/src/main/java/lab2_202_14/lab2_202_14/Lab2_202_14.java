@@ -20,7 +20,6 @@ import java.io.PrintWriter;
 import java.util.Arrays;
 
 public class Lab2_202_14 extends AppCompatActivity {
- int a = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,7 +48,7 @@ public class Lab2_202_14 extends AppCompatActivity {
         l.addView(accMax);
 
         //Sensor Setup
-        Sensor accSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        Sensor accSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
         AccSensorEventListener accObject = new AccSensorEventListener(acc, accMax, graph,graph2, accSensorHistory,accSensorHistoryFiltered);
         sensorManager.registerListener(accObject, accSensor, sensorManager.SENSOR_DELAY_GAME);
 

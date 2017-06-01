@@ -34,7 +34,7 @@ class AccSensorEventListener extends GeneralSensor {
     public void onAccuracyChanged(Sensor s, int i) { }
 
     public void onSensorChanged(SensorEvent se) {
-        if (se.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
+        if (se.sensor.getType() == Sensor.TYPE_LINEAR_ACCELERATION) {
 
             //Acc saves up to 100 values of its most recent history using the following code:
             for (int i = 99; i > 0; i--){       //Moves all items 1 place to the right
