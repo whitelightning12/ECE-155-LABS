@@ -82,21 +82,21 @@ class AccSensorEventListener extends GeneralSensor {
 
         thresRightRise = 0.1f;
         thresRightFall = -0.1f;
-        thresRightMax = 2;
-        thresRightMin = -4;
+        thresRightMax = 1;
+        thresRightMin = -3;
         thresLeftRise = 0.1f;
         thresLeftFall = -0.1f;
-        thresLeftMax = 4;
-        thresLeftMin = -2;
+        thresLeftMax = 3;
+        thresLeftMin = -1;
 
-        thresForwardRise = 2;
-        thresForwardFall = -2;
-        thresForwardMax = 4;
-        thresForwardMin = -3;
-        thresBackwardRise = 2;
-        thresBackwardFall = -2;
+        thresForwardRise = 0.1f;
+        thresForwardFall = -0.1f;
+        thresForwardMax = 3;
+        thresForwardMin = -1;
+        thresBackwardRise = 0.1f;
+        thresBackwardFall = -0.1f;
         thresBackwardMax = 1;
-        thresBackwardMin = -5;
+        thresBackwardMin = -3;
         //UpdateText(new float[]{0,0,0},Max,output,outputMax,sensorName); //Initial text update to set sensor reading to 0.
     }
 
@@ -173,18 +173,18 @@ class AccSensorEventListener extends GeneralSensor {
     public sensorState FSMForwardBackward(sensorState sensorStateFBFSM){
         switch(sensorStateFBFSM){
             case WAIT:
-                if (deltaAcc[1] < thresForwardFall){ //If the change in acc y is less then a certain threshold then the state switches to Fall first.
+                if (deltaAcc[1] < thresBackwardFall){ //If the change in acc y is less then a certain threshold then the state switches to Fall first.
                     sensorStateFBFSM = sensorState.FALL_FIRST;  //A fall first in the value of deltaAcc indicates a Right hand Gesture.
                 }
-                else if (deltaAcc[1] > thresLeftRise){ //If the change in acc is greater then a certain threshold then the state switches to Rise First.
+                else if (deltaAcc[1] > thresForwardRise){ //If the change in acc is greater then a certain threshold then the state switches to Rise First.
                     sensorStateFBFSM = sensorState.RISE_FIRST;  //A rise first in the value of deltaAcc indicates a left hand Gesture.
                 }
                 break;
             case FALL_FIRST:
-                if (deltaAcc[1] > 0f & minFB < thresForwardMin){ //If the acc value is increasing and the proper minimum was reached then switch to Rise_1 (RiseRight.
+                if (deltaAcc[1] > 0f & minFB < thresBackwardMin){ //If the acc value is increasing and the proper minimum was reached then switch to Rise_1 (RiseRight.
                     sensorStateFBFSM = sensorState.RISE_SECOND; //A rise second in the value of deltaAcc indicates a Right hand Gesture.
                 }
-                else if (deltaAcc[1] > 0f & minFB > thresForwardMin ){ //If the acc value is increasing and the proper minimum was never reached then unknown signal detected.
+                else if (deltaAcc[1] > 0f & minFB > thresBackwardMin ){ //If the acc value is increasing and the proper minimum was never reached then unknown signal detected.
                     sensorStateFBFSM = sensorState.DETERMINED;
                     typeFB = foundState.UNKNOWN; //If the fall does not complete then it is a unknown hand movement
                 }
@@ -193,21 +193,9 @@ class AccSensorEventListener extends GeneralSensor {
                 }
                 break;
             case RISE_SECOND:
-                if (deltaAcc[1] < 0f & maxFB > thresForwardMax){ //If the acc value is decreasing and the proper maximum was reached then switch to determined right state.
+                if (deltaAcc[1] < 0f & maxFB > thresBackwardMax){ //If the acc value is decreasing and the proper maximum was reached then switch to determined right state.
                     sensorStateFBFSM = sensorState.DETERMINED;
-                    typeFB = foundState.FORWARD;
-                }
-                else if (deltaAcc[1] < 0f & maxFB < thresForwardMax ){ //If the acc value is decreasing and the proper maximum was never reached then unknown signal detected.
-                    sensorStateFBFSM = sensorState.DETERMINED;
-                    typeFB = foundState.UNKNOWN;
-                }
-                if (maxFB < currentFilterReading[1]){ //if the current reading is greater then the max make the current reading the new maximum.
-                    maxFB = currentFilterReading[1];
-                }
-                break;
-            case RISE_FIRST:
-                if (deltaAcc[1] < 0f & maxFB > thresBackwardMax){ //If the acc value is decreasing and the proper maximum was reached then switch to Fall Left.
-                    sensorStateFBFSM = sensorState.FALL_SECOND;
+                    typeFB = foundState.BACKWARD;
                 }
                 else if (deltaAcc[1] < 0f & maxFB < thresBackwardMax ){ //If the acc value is decreasing and the proper maximum was never reached then unknown signal detected.
                     sensorStateFBFSM = sensorState.DETERMINED;
@@ -217,12 +205,24 @@ class AccSensorEventListener extends GeneralSensor {
                     maxFB = currentFilterReading[1];
                 }
                 break;
-            case FALL_SECOND:
-                if (deltaAcc[1] > 0f & minFB < thresBackwardMin){ //If the acc value is increasing and the proper minimum was reached then switch to determined type left.
-                    sensorStateFBFSM = sensorState.DETERMINED;
-                    typeFB = foundState.BACKWARD;
+            case RISE_FIRST:
+                if (deltaAcc[1] < 0f & maxFB > thresForwardMax){ //If the acc value is decreasing and the proper maximum was reached then switch to Fall Left.
+                    sensorStateFBFSM = sensorState.FALL_SECOND;
                 }
-                else if (deltaAcc[1] > 0f & minFB > thresBackwardMin ){ //If the acc value is increasing and the proper minimum was never reached then unknown signal detected.
+                else if (deltaAcc[1] < 0f & maxFB < thresForwardMax ){ //If the acc value is decreasing and the proper maximum was never reached then unknown signal detected.
+                    sensorStateFBFSM = sensorState.DETERMINED;
+                    typeFB = foundState.UNKNOWN;
+                }
+                if (maxFB < currentFilterReading[1]){ //if the current reading is greater then the max make the current reading the new maximum.
+                    maxFB = currentFilterReading[1];
+                }
+                break;
+            case FALL_SECOND:
+                if (deltaAcc[1] > 0f & minFB < thresForwardMin){ //If the acc value is increasing and the proper minimum was reached then switch to determined type left.
+                    sensorStateFBFSM = sensorState.DETERMINED;
+                    typeFB = foundState.FORWARD;
+                }
+                else if (deltaAcc[1] > 0f & minFB > thresForwardMin ){ //If the acc value is increasing and the proper minimum was never reached then unknown signal detected.
                     sensorStateFBFSM = sensorState.DETERMINED;
                     typeFB = foundState.UNKNOWN;
                 }
@@ -268,6 +268,9 @@ class AccSensorEventListener extends GeneralSensor {
             //else{
             //    typeLRFB = foundState.UNKNOWN;
             //}
+            if (sensorStateFBFSM == sensorState.DETERMINED){
+                direction.setText(typeFB.toString());
+            }
             if (sensorStateLRFSM == sensorState.DETERMINED){
                 direction.setText(typeLR.toString());
             }
