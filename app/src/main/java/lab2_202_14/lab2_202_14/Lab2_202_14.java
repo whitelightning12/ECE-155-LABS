@@ -12,6 +12,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import ca.uwaterloo.sensortoy.LineGraphView;
 
 import java.io.File;
@@ -60,18 +62,22 @@ public class Lab2_202_14 extends AppCompatActivity {
 
         //Button Press Setup
         csvOutputButton.setOnClickListener(new View.OnClickListener(){
+            int num = 0;
             public void onClick(View v) {
                 FileWriter fileWriter = null;
                 PrintWriter printWriter = null;
 
                 try{
-                    File file = new File(getExternalFilesDir("Lab1 Recorded Data"), "acc_readings.csv"); //Creates folder and file if not already there.
+                    File file = new File(getExternalFilesDir("Lab1 Recorded Data"), "acc_readings"+num+".csv"); //Creates folder and file if not already there.
+                    num = num + 1;
                     Log.d("LOG", file.getPath());
                     fileWriter = new FileWriter(file);
                     printWriter = new PrintWriter(fileWriter);
                     for (int i = 0; i < 100; i++) {  //Outputs acc values into excel file in table format.
                         printWriter.println(String.format("%.2f,%.2f,%.2f", accSensorHistoryFiltered[i][0], accSensorHistoryFiltered[i][1], accSensorHistoryFiltered[i][2]));
                     }
+                    Toast.makeText(getApplicationContext(), "CSV exported!",
+                            Toast.LENGTH_LONG).show();
                 }
 
                 catch(IOException e) {
