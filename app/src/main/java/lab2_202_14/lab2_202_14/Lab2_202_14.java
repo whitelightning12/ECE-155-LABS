@@ -1,5 +1,6 @@
 package lab2_202_14.lab2_202_14;
 
+import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -47,9 +48,14 @@ public class Lab2_202_14 extends AppCompatActivity {
         TextView accMax = new TextView(getApplicationContext());
         l.addView(accMax);
 
+        TextView direction = new TextView(getApplicationContext());
+        l.addView(direction);
+        direction.setTextColor(Color.BLACK);
+        direction.setTextSize(20);
+
         //Sensor Setup
         Sensor accSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
-        AccSensorEventListener accObject = new AccSensorEventListener(acc, accMax, graph,graph2, accSensorHistory,accSensorHistoryFiltered);
+        AccSensorEventListener accObject = new AccSensorEventListener(acc, accMax, direction, graph,graph2, accSensorHistory,accSensorHistoryFiltered);
         sensorManager.registerListener(accObject, accSensor, sensorManager.SENSOR_DELAY_GAME);
 
         //Button Press Setup
