@@ -58,6 +58,7 @@ class AccSensorEventListener extends GeneralSensor {
         sensorStateFBFSM = sensorState.WAIT;
         typeLR = foundState.NONE;
         typeFB = foundState.NONE;
+        direction.setText(typeLR.toString());
 
         maxLR = 0;
         minLR = 0;

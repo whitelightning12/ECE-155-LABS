@@ -2,25 +2,18 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
     android:background="#ffffff"
     tools:context="uwaterloo.ca.lab3_202_14.Lab3_202_14">
 
-    <ScrollView
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/scroll"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
+    <RelativeLayout
+        android:id="@+id/label2"
+        android:orientation="vertical"
+        android:layout_height="fill_parent"
+        android:layout_width="wrap_content">
 
-        <LinearLayout
-            android:id="@+id/label2"
-            android:layout_height="fill_parent"
-            android:layout_width="wrap_content"
-            android:orientation="vertical">
+    </RelativeLayout>
 
-        </LinearLayout>
-
-    </ScrollView>
 
 </android.support.constraint.ConstraintLayout>
