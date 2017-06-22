@@ -15,17 +15,25 @@ public class GameLoopTask extends TimerTask{
     private Activity myActivity;
     private Context gameloopCTX;
     private RelativeLayout gameLoopRL;
+    public enum gameDirection{UP,DOWN,LEFT,RIGHT,NO_MOVEMENT}
+    public gameDirection currentGameDirection;
 
     public GameLoopTask(Activity myActivity, Context myContext, RelativeLayout myRL){
         this.myActivity = myActivity;
         gameloopCTX = myContext;
         gameLoopRL = myRL;
         createBlock();
+        currentGameDirection = gameDirection.NO_MOVEMENT;
     }
 
     private void createBlock(){
         GameBlock newBlock = new GameBlock(gameloopCTX, 0, 0);
         gameLoopRL.addView(newBlock);
+    }
+
+    public void setDirection(gameDirection newDirection){
+        currentGameDirection = newDirection;
+        Log.d("DEBUG",currentGameDirection.toString());
     }
 
     @Override

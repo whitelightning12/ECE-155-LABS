@@ -5,11 +5,15 @@ import android.hardware.SensorEvent;
 import android.util.Log;
 import android.widget.TextView;
 
+import java.util.TimerTask;
+
 
 /**
  * Created by Alex Karner on 2017-05-28.
  */
 class AccSensorEventListener extends GeneralSensor {
+
+
 
     enum sensorState {WAIT, FALL_FIRST, RISE_SECOND, RISE_FIRST, FALL_SECOND, DETERMINED}
     enum foundState {NONE,UNKNOWN,RIGHT,LEFT,FORWARD,BACKWARD}
@@ -47,8 +51,9 @@ class AccSensorEventListener extends GeneralSensor {
     sensorState sensorStateFBFSM;
     foundState typeLR;
     foundState typeFB;
+    private GameLoopTask myGL;
 
-    public AccSensorEventListener(TextView outputViewDirection){
+    public AccSensorEventListener(TextView outputViewDirection,GameLoopTask myGameLoopTask){
         direction = outputViewDirection;
         currentFilterReading = new float[3];
         previousFilterReading = new float[3];
@@ -59,6 +64,7 @@ class AccSensorEventListener extends GeneralSensor {
         typeLR = foundState.NONE;
         typeFB = foundState.NONE;
         direction.setText(typeLR.toString());
+        myGL = myGameLoopTask;
 
         maxLR = 0;
         minLR = 0;
@@ -243,12 +249,22 @@ class AccSensorEventListener extends GeneralSensor {
 
             //If either state machine reaches determined state output the result on the screen
             if (sensorStateFBFSM == sensorState.DETERMINED){
-                Log.d("DEBUG", "TEST 1 2 3!");
                 direction.setText(typeFB.toString());
+                if (typeFB == foundState.BACKWARD){
+                    myGL.setDirection(GameLoopTask.gameDirection.DOWN);
+                }
+                else if(typeFB == foundState.FORWARD){
+                    myGL.setDirection(GameLoopTask.gameDirection.UP);
+                }
             }
             if (sensorStateLRFSM == sensorState.DETERMINED){
-                Log.d("DEBUG", "TEST 1 2 3!");
                 direction.setText(typeLR.toString());
+                if (typeLR == foundState.RIGHT){
+                    myGL.setDirection(GameLoopTask.gameDirection.LEFT);
+                }
+                else if(typeLR == foundState.LEFT){
+                    myGL.setDirection(GameLoopTask.gameDirection.RIGHT);
+                }
             }
         }
     }

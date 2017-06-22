@@ -40,7 +40,7 @@ public class Lab3_202_14 extends AppCompatActivity {
 
         //Sensor Setup
         Sensor accSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
-        AccSensorEventListener accObject = new AccSensorEventListener(direction);
+        AccSensorEventListener accObject = new AccSensorEventListener(direction,myGameLoopTask);
         sensorManager.registerListener(accObject, accSensor, sensorManager.SENSOR_DELAY_GAME);
     }
 }
