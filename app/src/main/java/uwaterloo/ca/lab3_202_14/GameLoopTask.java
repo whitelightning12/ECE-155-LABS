@@ -17,22 +17,25 @@ public class GameLoopTask extends TimerTask{
     private RelativeLayout gameLoopRL;
     public enum gameDirection{UP,DOWN,LEFT,RIGHT,NO_MOVEMENT}
     public gameDirection currentGameDirection;
+    public GameBlock newBlock;
 
     public GameLoopTask(Activity myActivity, Context myContext, RelativeLayout myRL){
         this.myActivity = myActivity;
         gameloopCTX = myContext;
         gameLoopRL = myRL;
-        createBlock();
+        newBlock = createBlock();
         currentGameDirection = gameDirection.NO_MOVEMENT;
     }
 
-    private void createBlock(){
+    private GameBlock createBlock(){
         GameBlock newBlock = new GameBlock(gameloopCTX, 0, 0);
         gameLoopRL.addView(newBlock);
+        return newBlock;
     }
 
     public void setDirection(gameDirection newDirection){
         currentGameDirection = newDirection;
+        newBlock.setBlockDirection(newDirection);
         Log.d("DEBUG",currentGameDirection.toString());
     }
 
@@ -42,7 +45,8 @@ public class GameLoopTask extends TimerTask{
                 new Runnable() {
                     @Override
                     public void run() {
-                        Log.d("DEBUG",String.valueOf(System.currentTimeMillis()));
+                        //Log.d("DEBUG",String.valueOf(System.currentTimeMillis()));
+                        newBlock.move();
                     }
                 }
         );
