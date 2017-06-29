@@ -9,7 +9,12 @@ import android.widget.ImageView;
  */
 
 public class GameBlock extends ImageView {
-    private float IMAGE_SCALE = 1f;
+    //This class is the block object which is controlled by hand gestures.
+    private final  int RIGHT_BORDER = 490;  //Max distance block can move right
+    private final  int LEFT_BORDER = 0;     //Max distance block can move left
+    private final  int BOTTOM_BORDER = 490; //Max distance block can move down
+    private final  int TOP_BORDER = 0;      //Max distance block can move up
+    private final float IMAGE_SCALE = 1f;         //How much to scale the block picture to match background
     private int myCoordX;
     private int myCoordY;
     private int targetmyCoordX;
@@ -25,55 +30,57 @@ public class GameBlock extends ImageView {
         targetmyCoordX = myCoordX;
         targetmyCoordY = myCoordY;
         V = 0;
-        this.setX(myCoordX);
-        this.setY(myCoordY);
-        this.setImageResource(R.drawable.gameblock);
-        this.setScaleX(IMAGE_SCALE);
-        this.setScaleY(IMAGE_SCALE);
+        this.setX(myCoordX);                            //Sets the x value of the picture location on the screen
+        this.setY(myCoordY);                            //Sets the y value of the picture location on the screen
+        this.setImageResource(R.drawable.gameblock);    //Sets the Imageresource to the correct PNG file
+        this.setScaleX(IMAGE_SCALE);                    //Sets the proper x scale factor for the image from the constant IMAGE_SCALE
+        this.setScaleY(IMAGE_SCALE);                    //Sets the proper y scale factor for the image from the constant IMAGE_SCALE
     }
 
     public void setBlockDirection(GameLoopTask.gameDirection newDir){
-        if (myCoordX == targetmyCoordX & myCoordY == targetmyCoordY) {
+        //Sets the target X and Y coordinates of the block from 4 standard direction (UP,LEFT,RIGHT,DOWN)
+        if (myCoordX == targetmyCoordX & myCoordY == targetmyCoordY) {   //Only accepts a new direction once the current target has been meet
             myDir = newDir;
             if (myDir == GameLoopTask.gameDirection.RIGHT) {
-                targetmyCoordX = 500;
+                targetmyCoordX = RIGHT_BORDER;                  //Sets the target x coord to the RIGHT_BORDER if RIGHT enum is inputted
             }
             if (myDir == GameLoopTask.gameDirection.LEFT) {
-                targetmyCoordX = 0;
+                targetmyCoordX = LEFT_BORDER;                   //Sets the target x coord to the LEFT_BORDER if LEFT enum is inputted
             }
             if (myDir == GameLoopTask.gameDirection.UP) {
-                targetmyCoordY = 0;
+                targetmyCoordY = TOP_BORDER;                    //Sets the target y coord to the TOP_BORDER if UP enum is inputted
             }
             if (myDir == GameLoopTask.gameDirection.DOWN) {
-                targetmyCoordY = 500;
+                targetmyCoordY = BOTTOM_BORDER;                 //Sets the target y coord to the BOTTOM_BORDER if DOWN enum is inputted
             }
             Log.d("DEBUG1", myDir.toString());
         }
     }
 
     public void move(){
-        if ((myCoordX < targetmyCoordX & myCoordX+V > targetmyCoordX)|(myCoordY < targetmyCoordY & myCoordY+V > targetmyCoordY)|
-            (myCoordX > targetmyCoordX & myCoordX-V < targetmyCoordX)|(myCoordY > targetmyCoordY & myCoordY-V < targetmyCoordY)|
+        //Function moves the block towards the target x or y coord with the current speed adding the acceleration constant every time the function is called
+        if ((myCoordX < targetmyCoordX & myCoordX+V > targetmyCoordX)|(myCoordY < targetmyCoordY & myCoordY+V > targetmyCoordY)|    //Checks whether the next location of the block is pass the target
+            (myCoordX > targetmyCoordX & myCoordX-V < targetmyCoordX)|(myCoordY > targetmyCoordY & myCoordY-V < targetmyCoordY)|    //Will set the block to the target if it is and set speed to 0.
             (myCoordX == targetmyCoordX & myCoordY == targetmyCoordY)){
             V = 0;
             myCoordX = targetmyCoordX;
             myCoordY = targetmyCoordY;
         }
 
-        if (myCoordX < targetmyCoordX){
+        if (myCoordX < targetmyCoordX){             //If the x coord is less then target x coord add the current speed to the block x coord to move it closer to target
             myCoordX = myCoordX + V;
         }
-        else if (myCoordX > targetmyCoordX){
+        else if (myCoordX > targetmyCoordX){        //If the x coord is greater then target x coord subtract the current speed from the block x coord to move it closer to target
             myCoordX = myCoordX - V;
         }
-        else if (myCoordY < targetmyCoordY){
+        else if (myCoordY < targetmyCoordY){         //If the y coord is less then target y coord add the current speed to the block y coord to move it closer to target
             myCoordY = myCoordY + V;
         }
-        else if (myCoordY > targetmyCoordY){
+        else if (myCoordY > targetmyCoordY){         //If the y coord is greater then target y coord subtract the current speed from the block y coord to move it closer to target
             myCoordY = myCoordY - V;
         }
-        V = V + A;
-        this.setX(myCoordX);
-        this.setY(myCoordY);
+        V = V + A;                          //Increase the speed by the constant acceleration declared
+        this.setX(myCoordX);                //Set the block x picture to the updated coordinate
+        this.setY(myCoordY);                //Set the block y picture to the updated coordinate
     }
 }

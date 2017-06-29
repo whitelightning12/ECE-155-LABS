@@ -247,23 +247,23 @@ class AccSensorEventListener extends GeneralSensor {
             sensorStateLRFSM = FSMRightLeft(sensorStateLRFSM);
             sensorStateFBFSM = FSMForwardBackward(sensorStateFBFSM);
 
-            //If either state machine reaches determined state output the result on the screen
-            if (sensorStateFBFSM == sensorState.DETERMINED){
+            //If either state machine reaches determined state move the block
+            if (sensorStateFBFSM == sensorState.DETERMINED){                //If the forward backward state machine gets a determined state output proper direction to gameblock
                 direction.setText(typeFB.toString());
                 if (typeFB == foundState.BACKWARD){
-                    myGL.setDirection(GameLoopTask.gameDirection.DOWN);
+                    myGL.setDirection(GameLoopTask.gameDirection.DOWN);     //If the movement of the phone is backwards set the direction of the block to down
                 }
-                else if(typeFB == foundState.FORWARD){
+                else if(typeFB == foundState.FORWARD){                      //If the movement of the phone is forwards set the direction of the block to up
                     myGL.setDirection(GameLoopTask.gameDirection.UP);
                 }
             }
-            if (sensorStateLRFSM == sensorState.DETERMINED){
+            if (sensorStateLRFSM == sensorState.DETERMINED){                //If the Left right state machine gets a determined state output proper direction to gameblock
                 direction.setText(typeLR.toString());
                 if (typeLR == foundState.RIGHT){
-                    myGL.setDirection(GameLoopTask.gameDirection.LEFT);
+                    myGL.setDirection(GameLoopTask.gameDirection.RIGHT);    //If the movement of the phone is right set the direction of the block to right
                 }
                 else if(typeLR == foundState.LEFT){
-                    myGL.setDirection(GameLoopTask.gameDirection.RIGHT);
+                    myGL.setDirection(GameLoopTask.gameDirection.LEFT);     //If the movement of the phone is left set the direction of the block to left
                 }
             }
         }

@@ -24,29 +24,29 @@ public class GameLoopTask extends TimerTask{
         gameloopCTX = myContext;
         gameLoopRL = myRL;
         newBlock = createBlock();
-        currentGameDirection = gameDirection.NO_MOVEMENT;
+        currentGameDirection = gameDirection.NO_MOVEMENT;   //Default direction is no movement
     }
 
     private GameBlock createBlock(){
+        //Creates a new game block object and returns it.
         GameBlock newBlock = new GameBlock(gameloopCTX, 0, 0);
-        gameLoopRL.addView(newBlock);
+        gameLoopRL.addView(newBlock);       //adds the block to the screen so it is visible
         return newBlock;
     }
 
     public void setDirection(gameDirection newDirection){
-        currentGameDirection = newDirection;
-        newBlock.setBlockDirection(newDirection);
-        Log.d("DEBUG",currentGameDirection.toString());
+        //Sets the game direction of the game loop task and the block direction
+        currentGameDirection = newDirection;                //Sets the gamelooptask direction to the new direction
+        newBlock.setBlockDirection(newDirection);           //Sets the blocks direction to the new direction
     }
 
     @Override
     public void run() {
-        this.myActivity.runOnUiThread(
+        this.myActivity.runOnUiThread(   //Runs the timer in the main activity
                 new Runnable() {
                     @Override
                     public void run() {
-                        //Log.d("DEBUG",String.valueOf(System.currentTimeMillis()));
-                        newBlock.move();
+                        newBlock.move(); //Moves the block towards its target every 50 ms
                     }
                 }
         );

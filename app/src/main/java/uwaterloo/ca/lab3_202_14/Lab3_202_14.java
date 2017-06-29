@@ -40,13 +40,14 @@ public class Lab3_202_14 extends AppCompatActivity {
         final GameLoopTask myGameLoopTask= new GameLoopTask(this,getApplicationContext(),l);
 
         Timer myGameLoop = new Timer();
-        myGameLoop.schedule(myGameLoopTask, 50, 50);
+        myGameLoop.schedule(myGameLoopTask, 50, 50);    //Schedules timer for display to update every 50 ms
 
         //Sensor Setup
         Sensor accSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
         AccSensorEventListener accObject = new AccSensorEventListener(direction,myGameLoopTask);
         sensorManager.registerListener(accObject, accSensor, sensorManager.SENSOR_DELAY_GAME);
 
+        //Button Setup
         Button LEFTButton = new Button(getApplicationContext());
         LEFTButton.setText("LEFT");
         l.addView(LEFTButton);
