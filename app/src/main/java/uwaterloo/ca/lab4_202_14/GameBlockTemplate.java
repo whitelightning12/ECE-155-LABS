@@ -11,6 +11,6 @@ abstract class GameBlockTemplate extends ImageView {
     GameBlockTemplate(Context myContext){
         super(myContext);
     }
-    abstract public void setDestination(GameLoopTask.gameDirection newDir);
+    abstract public void setDestination(GameLoopTask.gameDirection newDir,GameLoopTask loopTask);
     abstract public void move();
 }

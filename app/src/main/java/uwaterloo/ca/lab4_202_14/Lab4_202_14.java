@@ -7,10 +7,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import java.util.Timer;
 
 public class Lab4_202_14 extends AppCompatActivity {
@@ -21,23 +19,22 @@ public class Lab4_202_14 extends AppCompatActivity {
         RelativeLayout l = (RelativeLayout)findViewById(R.id.label2);
         l.getLayoutParams().width = 1024;
         l.getLayoutParams().height = 1024;
-
-        //ImageView test = new ImageView(getApplicationContext());
-        //test.setImageResource(R.drawable.gameboard);
-        //test.setX(0);
-        //test.setY(0);
-        //l.addView(test);
         l.setBackgroundResource(R.drawable.gameboard);
+        RelativeLayout dataLayout = (RelativeLayout)findViewById(R.id.label3);
+        dataLayout.getLayoutParams().width = 1024;
+        dataLayout.getLayoutParams().height = 1024;
+        dataLayout.setX(0);
+        dataLayout.setY(1024);
 
         final SensorManager sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
 
         //Display Setup
         TextView direction = new TextView(getApplicationContext());
-        l.addView(direction);
+        dataLayout.addView(direction);
         direction.setTextColor(Color.BLACK);
         direction.setTextSize(20);
-        direction.setX(300);
-        direction.setY(700);
+        direction.setX(440);
+        direction.setY(0);
 
         final GameLoopTask myGameLoopTask= new GameLoopTask(this,getApplicationContext(),l);
 
@@ -52,8 +49,10 @@ public class Lab4_202_14 extends AppCompatActivity {
         //Button Setup
         Button LEFTButton = new Button(getApplicationContext());
         LEFTButton.setText("LEFT");
-        l.addView(LEFTButton);
-        LEFTButton.setY(700);
+        dataLayout.addView(LEFTButton);
+        LEFTButton.setX(150);
+        LEFTButton.setY(100);
+
 
         LEFTButton.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v) {
@@ -63,8 +62,9 @@ public class Lab4_202_14 extends AppCompatActivity {
 
         Button RIGHTButton = new Button(getApplicationContext());
         RIGHTButton.setText("RIGHT");
-        l.addView(RIGHTButton);
-        RIGHTButton.setY(900);
+        dataLayout.addView(RIGHTButton);
+        RIGHTButton.setX(150);
+        RIGHTButton.setY(300);
 
         RIGHTButton.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v) {
@@ -74,8 +74,9 @@ public class Lab4_202_14 extends AppCompatActivity {
 
         Button UPButton = new Button(getApplicationContext());
         UPButton.setText("UP");
-        l.addView(UPButton);
-        UPButton.setY(1100);
+        dataLayout.addView(UPButton);
+        UPButton.setX(650);
+        UPButton.setY(100);
 
         UPButton.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v) {
@@ -85,8 +86,9 @@ public class Lab4_202_14 extends AppCompatActivity {
 
         Button DOWNButton = new Button(getApplicationContext());
         DOWNButton.setText("DOWN");
-        l.addView(DOWNButton);
-        DOWNButton.setY(1300);
+        dataLayout.addView(DOWNButton);
+        DOWNButton.setX(650);
+        DOWNButton.setY(300);
 
         DOWNButton.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v) {
