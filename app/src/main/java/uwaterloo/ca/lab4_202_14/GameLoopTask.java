@@ -120,27 +120,16 @@ public class GameLoopTask extends TimerTask{
                 new Runnable() {
                     @Override
                     public void run() {
-                        //Random rand = new Random();
-                        //int random = rand.nextInt(4);
-                        //if (random == 0){
-                        //    setDirection(GameLoopTask.gameDirection.RIGHT);
-                       // }
-                       // else if (random == 1){
-                        //    setDirection(GameLoopTask.gameDirection.LEFT);
-                        //}
-                        //else if (random == 2){
-                        //    setDirection(GameLoopTask.gameDirection.UP);
-                        //}
-                        //else if (random == 3) {
-                        //    setDirection(GameLoopTask.gameDirection.DOWN);
-                        //}
                         allFinishedMoving = true;
                         for(int i = 0;i < myGBList.size();i++){
                             if (myGBList.get(i).shouldDestory()){
                                 myGBList.get(i).destroyBlock();
                                 myGBList.remove(i);
                             }
-                            myGBList.get(i).move();
+                            try {
+                                myGBList.get(i).move();
+                            }
+                            catch(IndexOutOfBoundsException e){}
                             if (myGBList.get(i).targetReached() == false){
                                 allFinishedMoving = false;
                             }
