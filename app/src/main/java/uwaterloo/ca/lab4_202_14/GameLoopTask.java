@@ -48,26 +48,26 @@ public class GameLoopTask extends TimerTask{
         //Creates a new game block object and returns it.
         Random rand = new Random();
         int allSpaces[][] = new int[4][4];
-        for(int i = 0;i < myGBList.size();i++) {
+        for(int i = 0;i < myGBList.size();i++) {                                    //Fills array with 1's where blocks are
             allSpaces[myGBList.get(i).getRow()][myGBList.get(i).getColumn()] = 1;
         }
         int totalFreeSpaces = 0;
-        for(int z = 0; z < 4; z++){
+        for(int z = 0; z < 4; z++){                                                 //Counts number of 1s to determine number of free spaces
             for(int i = 0; i < 4; i++){
                 if (allSpaces[z][i] == 0){
                      totalFreeSpaces = totalFreeSpaces + 1;
                 }
             }
         }
-        if (totalFreeSpaces == 0){
+        if (totalFreeSpaces == 0){                                                  //If no free spaces then end of game has been reached
             endGameFlag = true;
         }
         if (endGameFlag == false) {
-            int randomSpot = rand.nextInt(totalFreeSpaces) + 1;
+            int randomSpot = rand.nextInt(totalFreeSpaces) + 1;                     //Chooses random free space
             int currentFreeSpace = 0;
             int random_row = 0;
             int random_column = 0;
-            for (int z = 0; z < 4; z++) {
+            for (int z = 0; z < 4; z++) {                                           //Determines random spot choosen
                 for (int i = 0; i < 4; i++) {
                     if (allSpaces[z][i] == 0) {
                         currentFreeSpace = currentFreeSpace + 1;
@@ -78,13 +78,13 @@ public class GameLoopTask extends TimerTask{
                     }
                 }
             }
-            //Log.d("DEBUG", "New Block: Row: " + Integer.toString(random_row) + " Column: " + Integer.toString(random_column));
-            GameBlock newBlock = new GameBlock(gameloopCTX, random_row, random_column, gameLoopRL);
+            GameBlock newBlock = new GameBlock(gameloopCTX, random_row, random_column, gameLoopRL);     //Creates new random block at random coords
             myGBList.add(newBlock);
         }
     }
 
     public GameBlock isOccupied(int row,int column){
+        //Determines if inputted row and column has a block in it and returns that block or returns null if no block at coords
         for(int i = 0;i < myGBList.size();i++) {
             if (myGBList.get(i).getRow() == row & myGBList.get(i).getColumn() == column) {
                 return myGBList.get(i);
@@ -98,7 +98,7 @@ public class GameLoopTask extends TimerTask{
         if (endGameFlag == false){
             currentGameDirection = newDirection;                //Sets the gamelooptask direction to the new direction
             for(int i = 0;i < myGBList.size();i++){
-                myGBList.get(i).setDestination(newDirection,this);
+                myGBList.get(i).setDestination(newDirection,this);  //Sets each blocks direction
 
             }
             createBlock = true;
@@ -117,26 +117,26 @@ public class GameLoopTask extends TimerTask{
                     public void run() {
                         allFinishedMoving = true;
                         for(int i = 0;i < myGBList.size();i++){
-                            if (myGBList.get(i).shouldDestory()){
+                            if (myGBList.get(i).shouldDestory()){       //If a certain block is set to be destroyed remove it from view and remove it from list
                                 myGBList.get(i).destroyBlock();
                                 myGBList.remove(i);
                             }
                             try {
-                                myGBList.get(i).move();
+                                myGBList.get(i).move();                 //Moves a block
                             }
                             catch(IndexOutOfBoundsException e){}
-                            if (myGBList.get(i).targetReached() == false){
+                            if (myGBList.get(i).targetReached() == false){      //If a single block hasn't finished moving then allfinishedmoving variable becomes false
                                 allFinishedMoving = false;
                             }
-                            if (myGBList.get(i).getTextBlockNumber() == 2048){
+                            if (myGBList.get(i).getTextBlockNumber() == 2048){  //If one block has 2048 then end game flag is set to true
                                 endGameFlag = true;
                             }
                         } //Moves the block towards its target every 50 ms
-                        if (allFinishedMoving & createBlock){
+                        if (allFinishedMoving & createBlock){                   //If all blocks have finished moving and create block is true then update block numbers
                             for(int i = 0;i < myGBList.size();i++) {
                                 myGBList.get(i).updateBlockNumber();
                             }
-                            createBlock();
+                            createBlock();                                      //Creates new block after every movement
                             createBlock = false;
                         }
                     }
