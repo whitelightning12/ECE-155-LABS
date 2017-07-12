@@ -139,7 +139,6 @@ public class GameBlock extends GameBlockTemplate {
                         nextBlock = FindNextBlockLeft(currentBlock.myRow, currentBlock.myColumn, loopTask);
                     }
                 }
-                Log.d("DEBUG", "Pairs: " + Integer.toString(pairs) + " blocksInWay: " + Integer.toString(blocksInWay) + " pairAfter: " + Boolean.toString(pairAfter) );
                 if (pairs == 0) {
                     targetMyColumn = GameLoopTask.COLUMNS - blocksInWay;
                 }
@@ -200,7 +199,6 @@ public class GameBlock extends GameBlockTemplate {
                         nextBlock = FindNextBlockRight(currentBlock.myRow, currentBlock.myColumn, loopTask);
                     }
                 }
-                Log.d("DEBUG", "Pairs: " + Integer.toString(pairs) + " blocksInWay: " + Integer.toString(blocksInWay) + " pairAfter: " + Boolean.toString(pairAfter) );
                 if (pairs == 0) {
                     targetMyColumn = blocksInWay;
                 }
@@ -262,7 +260,6 @@ public class GameBlock extends GameBlockTemplate {
                         nextBlock = FindNextBlockDown(currentBlock.myRow, currentBlock.myColumn, loopTask);
                     }
                 }
-                Log.d("DEBUG", "Pairs: " + Integer.toString(pairs) + " blocksInWay: " + Integer.toString(blocksInWay) + " pairAfter: " + Boolean.toString(pairAfter) );
                 if (pairs == 0) {
                     targetMyRow = blocksInWay;
                 }
@@ -324,7 +321,6 @@ public class GameBlock extends GameBlockTemplate {
                         nextBlock = FindNextBlockUp(currentBlock.myRow, currentBlock.myColumn, loopTask);
                     }
                 }
-                Log.d("DEBUG", "Pairs: " + Integer.toString(pairs) + " blocksInWay: " + Integer.toString(blocksInWay) + " pairAfter: " + Boolean.toString(pairAfter) );
                 if (pairs == 0) {
                     targetMyRow = GameLoopTask.ROWS - blocksInWay;
                 }

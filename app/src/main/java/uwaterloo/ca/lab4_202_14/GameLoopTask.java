@@ -60,11 +60,7 @@ public class GameLoopTask extends TimerTask{
             }
         }
         if (totalFreeSpaces == 0){
-            while (!myGBList.isEmpty()) {
-                myGBList.getFirst().destroyBlock();
-                myGBList.removeFirst();
-            }
-           endGameFlag = true;
+            endGameFlag = true;
         }
         if (endGameFlag == false) {
             int randomSpot = rand.nextInt(totalFreeSpaces) + 1;
@@ -86,7 +82,6 @@ public class GameLoopTask extends TimerTask{
             GameBlock newBlock = new GameBlock(gameloopCTX, random_row, random_column, gameLoopRL);
             myGBList.add(newBlock);
         }
-        endGameFlag = false;
     }
 
     public GameBlock isOccupied(int row,int column){
