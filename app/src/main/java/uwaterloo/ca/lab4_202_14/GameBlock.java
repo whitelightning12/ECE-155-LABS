@@ -303,11 +303,6 @@ public class GameBlock extends GameBlockTemplate {
                 while (currentBlock != null) {                                                                      //while there is still a block in this column
                     if (nextBlock != null) {                                                                        //If there is still a block next to current block
                         //If the current block number is the same as the next block number and the last two blocks were not a pair
-                        Log.d("DEBUG", "Current: " + currentBlock.blockNumberTextView.getText().toString());
-                        Log.d("DEBUG", "Next: " + nextBlock.blockNumberTextView.getText().toString());
-                        Log.d("DEBUG", "test: " + Boolean.toString( Integer.parseInt(currentBlock.blockNumberTextView.getText().toString()) == Integer.parseInt(nextBlock.blockNumberTextView.getText().toString())));
-                        Log.d("DEBUG", "test2: " + Boolean.toString(Integer.parseInt(currentBlock.blockNumberTextView.getText().toString()) == Integer.parseInt(nextBlock.blockNumberTextView.getText().toString())));
-                        Log.d("DEBUG", "pair: " + Boolean.toString(pair));
                         if (Integer.parseInt(currentBlock.blockNumberTextView.getText().toString()) == Integer.parseInt(nextBlock.blockNumberTextView.getText().toString()) & !pair) {
                             pairs += 1;                                                                             //Add to the number of pairs
                             pair = true;
@@ -326,15 +321,12 @@ public class GameBlock extends GameBlockTemplate {
                         nextBlock = FindNextBlockUp(currentBlock.myRow, currentBlock.myColumn, loopTask);           //Finds block below current block as long as current block exists
                     }
                 }
-                Log.d("DEBUG", "pairs: " + Integer.toString(pairs));
                 if (pairs == 0) {                                                                                   //If there are no pairs then set my target to be the bottom of grid minus blocks in way
                     targetMyRow = GameLoopTask.ROWS - blocksInWay;
                 }
                 else if (pairs == 1) {                                                                              //else if pairs is equal to 1
                     GameBlock blockDown = FindNextBlockDown(myRow, myColumn, loopTask);                             //Finds block below of my block
                     if (blockDown != null) {
-                        Log.d("DEBUG", "Next: " + blockDown.blockNumberTextView.getText().toString());
-                        Log.d("DEBUG", "Current: " + blockNumberTextView.getText().toString());
                     }
                     if (blockDown == null) {                                                                        //If there is no block to the below then set my target to total number of rows
                         targetMyRow = GameLoopTask.ROWS;
