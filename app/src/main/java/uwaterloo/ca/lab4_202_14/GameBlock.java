@@ -49,7 +49,7 @@ public class GameBlock extends GameBlockTemplate {
         gameBlockRL = myRL;
         gameBlockRL.addView(this);                      //adds the block to the screen so it is visible
         gameBlockRL.addView(blockNumberTextView);
-        blockNumberTextView.setX(myColumn*SLOT_ISOLATION+85);
+        blockNumberTextView.setX(myColumn*SLOT_ISOLATION+10);
         blockNumberTextView.setY(myRow*SLOT_ISOLATION+30);
         myCoordX = myColumn*SLOT_ISOLATION;
         myCoordY = myRow*SLOT_ISOLATION;
@@ -117,7 +117,7 @@ public class GameBlock extends GameBlockTemplate {
                 while (currentBlock != null) {                                                                       //while there is still a block in this row
                     if (nextBlock != null) {                                                                         //If there is still a block next to current block
                         //If the current block number is the same as the next block number and the last two blocks were not a pair
-                        if (currentBlock.blockNumberTextView.getText() == nextBlock.blockNumberTextView.getText() & !pair) {
+                        if (Integer.parseInt(currentBlock.blockNumberTextView.getText().toString()) == Integer.parseInt(nextBlock.blockNumberTextView.getText().toString()) & !pair) {
                             pairs += 1;                                                                              //Add to the number of pairs
                             pair = true;
                             if (myColumn < nextBlock.myColumn) {                                                     //If myblock is before next block then there is a pair after current block
@@ -146,7 +146,7 @@ public class GameBlock extends GameBlockTemplate {
                     else if (pairAfter) {                                                                           //else if there is a pair to the right set target column to column 3 - blocks in way + 1
                         targetMyColumn = GameLoopTask.COLUMNS + 1 - blocksInWay;
                     }
-                    else if (blockRight.blockNumberTextView.getText() == blockNumberTextView.getText()) {           //else if the block to the right has same number combine with it
+                    else if (Integer.parseInt(blockNumberTextView.getText().toString()) == Integer.parseInt(blockRight.blockNumberTextView.getText().toString())) {           //else if the block to the right has same number combine with it
                         targetMyColumn = GameLoopTask.COLUMNS + 1 - blocksInWay;
                         blockRight.blockNumber = blockNumber * 2;
                         deleteFlag = true;
@@ -178,7 +178,7 @@ public class GameBlock extends GameBlockTemplate {
                 while (currentBlock != null) {                                                                      //while there is still a block in this row
                     if (nextBlock != null) {                                                                        //If there is still a block next to current block
                         //If the current block number is the same as the next block number and the last two blocks were not a pair
-                        if (currentBlock.blockNumberTextView.getText() == nextBlock.blockNumberTextView.getText() & !pair) {
+                        if (Integer.parseInt(currentBlock.blockNumberTextView.getText().toString()) == Integer.parseInt(nextBlock.blockNumberTextView.getText().toString()) & !pair) {
                             pairs += 1;                                                                             //Add to the number of pairs
                             pair = true;
                             if (myColumn > nextBlock.myColumn) {                                                    //If myblock is before next block then there is a pair after current block
@@ -207,7 +207,7 @@ public class GameBlock extends GameBlockTemplate {
                     else if (pairAfter) {                                                                           //else if there is a pair to the left set target column to blocks in way minus 1
                         targetMyColumn = blocksInWay-1;
                     }
-                    else if (blockLeft.blockNumberTextView.getText() == blockNumberTextView.getText()) {            //else if the block to the left has same number combine with it
+                    else if (Integer.parseInt(blockNumberTextView.getText().toString()) == Integer.parseInt(blockLeft.blockNumberTextView.getText().toString())) {            //else if the block to the left has same number combine with it
                         targetMyColumn = blocksInWay-1;
                         blockLeft.blockNumber = blockNumber * 2;
                         deleteFlag = true;
@@ -240,7 +240,7 @@ public class GameBlock extends GameBlockTemplate {
                 while (currentBlock != null) {                                                                      //while there is still a block in this column
                     if (nextBlock != null) {                                                                        //If there is still a block next to current block
                         //If the current block number is the same as the next block number and the last two blocks were not a pair
-                        if (currentBlock.blockNumberTextView.getText() == nextBlock.blockNumberTextView.getText() & !pair) {
+                        if (Integer.parseInt(currentBlock.blockNumberTextView.getText().toString()) == Integer.parseInt(nextBlock.blockNumberTextView.getText().toString()) & !pair) {
                             pairs += 1;                                                                             //Add to the number of pairs
                             pair = true;
                             if (myRow > nextBlock.myRow) {                                                          //If myblock is before next block then there is a pair after current block
@@ -269,7 +269,7 @@ public class GameBlock extends GameBlockTemplate {
                     else if (pairAfter) {                                                                           //else if there is a pair above set target row to blocks in way minus 1
                         targetMyRow = blocksInWay-1;
                     }
-                    else if (blockUp.blockNumberTextView.getText() == blockNumberTextView.getText()) {              //else if the block above has same number combine with it
+                    else if (Integer.parseInt(blockNumberTextView.getText().toString()) == Integer.parseInt(blockUp.blockNumberTextView.getText().toString())) {              //else if the block above has same number combine with it
                         targetMyRow = blocksInWay-1;
                         blockUp.blockNumber = blockNumber * 2;
                         deleteFlag = true;                                                                          //set delete flag
@@ -299,10 +299,16 @@ public class GameBlock extends GameBlockTemplate {
             if (myDir == DOWN) {
                 GameBlock currentBlock = FindNextBlockUp(GameLoopTask.ROWS+1, myColumn, loopTask);                  //Finds first block at the bottom of grid in a certain column
                 GameBlock nextBlock = FindNextBlockUp(currentBlock.myRow, currentBlock.myColumn, loopTask);         //Find block above current block
+
                 while (currentBlock != null) {                                                                      //while there is still a block in this column
                     if (nextBlock != null) {                                                                        //If there is still a block next to current block
                         //If the current block number is the same as the next block number and the last two blocks were not a pair
-                        if (currentBlock.blockNumberTextView.getText() == nextBlock.blockNumberTextView.getText() & !pair) {
+                        Log.d("DEBUG", "Current: " + currentBlock.blockNumberTextView.getText().toString());
+                        Log.d("DEBUG", "Next: " + nextBlock.blockNumberTextView.getText().toString());
+                        Log.d("DEBUG", "test: " + Boolean.toString( Integer.parseInt(currentBlock.blockNumberTextView.getText().toString()) == Integer.parseInt(nextBlock.blockNumberTextView.getText().toString())));
+                        Log.d("DEBUG", "test2: " + Boolean.toString(Integer.parseInt(currentBlock.blockNumberTextView.getText().toString()) == Integer.parseInt(nextBlock.blockNumberTextView.getText().toString())));
+                        Log.d("DEBUG", "pair: " + Boolean.toString(pair));
+                        if (Integer.parseInt(currentBlock.blockNumberTextView.getText().toString()) == Integer.parseInt(nextBlock.blockNumberTextView.getText().toString()) & !pair) {
                             pairs += 1;                                                                             //Add to the number of pairs
                             pair = true;
                             if (myRow < nextBlock.myRow) {                                                          //If myblock is before next block then there is a pair after current block
@@ -320,18 +326,23 @@ public class GameBlock extends GameBlockTemplate {
                         nextBlock = FindNextBlockUp(currentBlock.myRow, currentBlock.myColumn, loopTask);           //Finds block below current block as long as current block exists
                     }
                 }
+                Log.d("DEBUG", "pairs: " + Integer.toString(pairs));
                 if (pairs == 0) {                                                                                   //If there are no pairs then set my target to be the bottom of grid minus blocks in way
                     targetMyRow = GameLoopTask.ROWS - blocksInWay;
                 }
                 else if (pairs == 1) {                                                                              //else if pairs is equal to 1
                     GameBlock blockDown = FindNextBlockDown(myRow, myColumn, loopTask);                             //Finds block below of my block
+                    if (blockDown != null) {
+                        Log.d("DEBUG", "Next: " + blockDown.blockNumberTextView.getText().toString());
+                        Log.d("DEBUG", "Current: " + blockNumberTextView.getText().toString());
+                    }
                     if (blockDown == null) {                                                                        //If there is no block to the below then set my target to total number of rows
                         targetMyRow = GameLoopTask.ROWS;
                     }
                     else if (pairAfter) {                                                                           //else if there is a pair to the below set target row to total rows - blocks in way + 1
                         targetMyRow = GameLoopTask.ROWS-blocksInWay+1;
                     }
-                    else if (blockDown.blockNumberTextView.getText() == blockNumberTextView.getText()) {            //else if the block below has same number combine with it
+                    else if (Integer.parseInt(blockNumberTextView.getText().toString()) == Integer.parseInt(blockDown.blockNumberTextView.getText().toString())) {            //else if the block below has same number combine with it
                         targetMyRow = GameLoopTask.ROWS-blocksInWay+1;
                         blockDown.blockNumber = blockNumber * 2;
                         deleteFlag = true;
@@ -387,7 +398,7 @@ public class GameBlock extends GameBlockTemplate {
         V = V + A;                          //Increase the speed by the constant acceleration declared
         this.setX(myCoordX);                //Set the block x picture to the updated coordinate
         this.setY(myCoordY);                //Set the block y picture to the updated coordinate
-        blockNumberTextView.setX(myCoordX+85);
+        blockNumberTextView.setX(myCoordX+10);
         blockNumberTextView.setY(myCoordY+30);
 
     }

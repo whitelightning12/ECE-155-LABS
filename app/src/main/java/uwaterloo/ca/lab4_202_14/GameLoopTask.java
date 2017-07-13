@@ -117,21 +117,22 @@ public class GameLoopTask extends TimerTask{
                     public void run() {
                         allFinishedMoving = true;
                         for(int i = 0;i < myGBList.size();i++){
+                            myGBList.get(i).move();                 //Moves a block
+                            if (myGBList.get(i).targetReached() == false){      //If a single block hasn't finished moving then allfinishedmoving variable becomes false
+                                allFinishedMoving = false;
+                            }
+                            if (myGBList.get(i).getTextBlockNumber() == 256){  //If one block has 2048 then end game flag is set to true
+                                endGameFlag = true;
+                            }
+
+                        }
+                        for(int i = 0;i < myGBList.size();i++){
                             if (myGBList.get(i).shouldDestory()){       //If a certain block is set to be destroyed remove it from view and remove it from list
                                 myGBList.get(i).destroyBlock();
                                 myGBList.remove(i);
                             }
-                            try {
-                                myGBList.get(i).move();                 //Moves a block
-                            }
-                            catch(IndexOutOfBoundsException e){}
-                            if (myGBList.get(i).targetReached() == false){      //If a single block hasn't finished moving then allfinishedmoving variable becomes false
-                                allFinishedMoving = false;
-                            }
-                            if (myGBList.get(i).getTextBlockNumber() == 2048){  //If one block has 2048 then end game flag is set to true
-                                endGameFlag = true;
-                            }
-                        } //Moves the block towards its target every 50 ms
+                        }
+                        //Moves the block towards its target every 50 ms
                         if (allFinishedMoving & createBlock){                   //If all blocks have finished moving and create block is true then update block numbers
                             for(int i = 0;i < myGBList.size();i++) {
                                 myGBList.get(i).updateBlockNumber();
